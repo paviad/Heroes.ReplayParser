@@ -5,6 +5,18 @@ namespace Heroes.ReplayParser
 {
     public class Player
     {
+        private int[] _color = new int[0];
+        private Talent[] _talents = new Talent[0];
+        private bool _isSilenced = false;
+        private string _mountAndMountTint = null;
+        private List<Unit> _heroUnits = new List<Unit>();
+        private ScoreResult _scoreResult = new ScoreResult();
+        private List<UpgradeEvent> _upgradeEvents = new List<UpgradeEvent>();
+        private Dictionary<string, bool> _miscellaneousUpgradeEventDictionary = new Dictionary<string, bool>();
+        private Dictionary<string, int> _miscellaneousScoreResultEventDictionary = new Dictionary<string, int>();
+        private Dictionary<string, bool> _playerCollectionDictionary = new Dictionary<string, bool>();
+        private string _skinAndSkinTint = null;
+
         /// <summary>
         /// Gets or sets the Battle.NET region of a player.
         /// </summary>
@@ -23,7 +35,11 @@ namespace Heroes.ReplayParser
         /// <summary>
         /// Gets or sets the player's color.
         /// </summary>
-        public int[] Color { get; set; } = new int[0];
+        public int[] Color
+        {
+            get { return _color; }
+            set { _color = value; }
+        }
 
         /// <summary>
         /// Gets or sets the difficulty of a computer player.
@@ -73,12 +89,20 @@ namespace Heroes.ReplayParser
         /// <summary>
         /// Gets or sets the player's skin / skin tint.
         /// </summary>
-        public string SkinAndSkinTint { get; set; } = null;
+        public string SkinAndSkinTint
+        {
+            get { return _skinAndSkinTint; }
+            set { _skinAndSkinTint = value; }
+        }
 
         /// <summary>
         /// Gets or sets the player's mount / mount tint.
         /// </summary>
-        public string MountAndMountTint { get; set; } = null;
+        public string MountAndMountTint
+        {
+            get { return _mountAndMountTint; }
+            set { _mountAndMountTint = value; }
+        }
 
         /// <summary>
         /// Gets or sets the player's character level.
@@ -88,42 +112,74 @@ namespace Heroes.ReplayParser
         /// <summary>
         /// Gets or sets if the player has been given the silenced penalty
         /// </summary>
-        public bool IsSilenced { get; set; } = false;
+        public bool IsSilenced
+        {
+            get { return _isSilenced; }
+            set { _isSilenced = value; }
+        }
 
         /// <summary>
         /// Gets or sets the player's selected Hero talents
         /// </summary>
-        public Talent[] Talents { get; set; } = new Talent[0];
+        public Talent[] Talents
+        {
+            get { return _talents; }
+            set { _talents = value; }
+        }
 
         /// <summary>
         /// Gets or sets the player's in game Hero units.
         /// </summary>
-        public List<Unit> HeroUnits { get; set; } = new List<Unit>();
+        public List<Unit> HeroUnits
+        {
+            get { return _heroUnits; }
+            set { _heroUnits = value; }
+        }
 
         /// <summary>
         /// Gets or sets the player's standard end game score result statistics
         /// </summary>
-        public ScoreResult ScoreResult { get; set; } = new ScoreResult();
+        public ScoreResult ScoreResult
+        {
+            get { return _scoreResult; }
+            set { _scoreResult = value; }
+        }
 
         /// <summary>
         /// Gets or sets the player's Upgrade Events
         /// </summary>
-        public List<UpgradeEvent> UpgradeEvents { get; set; } = new List<UpgradeEvent>();
+        public List<UpgradeEvent> UpgradeEvents
+        {
+            get { return _upgradeEvents; }
+            set { _upgradeEvents = value; }
+        }
 
         /// <summary>
         /// Gets or sets the player's miscellaneous upgrade events
         /// </summary>
-        public Dictionary<string, bool> MiscellaneousUpgradeEventDictionary { get; set; } = new Dictionary<string, bool>();
+        public Dictionary<string, bool> MiscellaneousUpgradeEventDictionary
+        {
+            get { return _miscellaneousUpgradeEventDictionary; }
+            set { _miscellaneousUpgradeEventDictionary = value; }
+        }
 
         /// <summary>
         /// Gets or sets the player's miscellaneous end game score result statistics
         /// </summary>
-        public Dictionary<string, int> MiscellaneousScoreResultEventDictionary { get; set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> MiscellaneousScoreResultEventDictionary
+        {
+            get { return _miscellaneousScoreResultEventDictionary; }
+            set { _miscellaneousScoreResultEventDictionary = value; }
+        }
 
         /// <summary>
         /// Gets or sets the player's collection, no longer available since 56175
         /// </summary>
-        public Dictionary<string, bool> PlayerCollectionDictionary { get; set; } = new Dictionary<string, bool>();
+        public Dictionary<string, bool> PlayerCollectionDictionary
+        {
+            get { return _playerCollectionDictionary; }
+            set { _playerCollectionDictionary = value; }
+        }
 
         /// <summary>
         /// Gets or sets the the player's party (same value, same party)
@@ -143,45 +199,180 @@ namespace Heroes.ReplayParser
 
     public class ScoreResult
     {
-        public int Level { get; set; } = 0;
+        private List<MatchAwardType> _matchAwards = new List<MatchAwardType>();
+        private TimeSpan _timeSpentDead = TimeSpan.Zero;
+        private int _takedowns = 0;
+        private int _level = 0;
+        private int _soloKills = 0;
+        private int _assists = 0;
+        private int _deaths = 0;
+        private int _highestKillStreak = 0;
+        private int _heroDamage = 0;
+        private int _siegeDamage = 0;
+        private int _structureDamage = 0;
+        private int _minionDamage = 0;
+        private int _creepDamage = 0;
+        private int _summonDamage = 0;
+        private TimeSpan? _timeCCdEnemyHeroes = null;
+        private int? _healing = null;
+        private int _selfHealing = 0;
+        private int? _damageTaken = null;
+        private int _experienceContribution = 0;
+        private int _townKills = 0;
+        private int _mercCampCaptures = 0;
+        private int _watchTowerCaptures = 0;
+        private int _metaExperience = 0;
 
-        public int Takedowns { get; set; } = 0;
-        public int SoloKills { get; set; } = 0;
-        public int Assists { get; set; } = 0;
-        public int Deaths { get; set; } = 0;
-        public int HighestKillStreak { get; set; } = 0;
+        public int Level
+        {
+            get { return _level; }
+            set { _level = value; }
+        }
 
-        public int HeroDamage { get; set; } = 0;
-        public int SiegeDamage { get; set; } = 0;
-        public int StructureDamage { get; set; } = 0;
-        public int MinionDamage { get; set; } = 0;
-        public int CreepDamage { get; set; } = 0;
-        public int SummonDamage { get; set; } = 0;
+        public int Takedowns
+        {
+            get { return _takedowns; }
+            set { _takedowns = value; }
+        }
 
-        public TimeSpan? TimeCCdEnemyHeroes { get; set; } = null;
+        public int SoloKills
+        {
+            get { return _soloKills; }
+            set { _soloKills = value; }
+        }
 
-        public int? Healing { get; set; } = null;
-        public int SelfHealing { get; set; } = 0;
+        public int Assists
+        {
+            get { return _assists; }
+            set { _assists = value; }
+        }
 
-        public int? DamageTaken { get; set; } = null;
+        public int Deaths
+        {
+            get { return _deaths; }
+            set { _deaths = value; }
+        }
 
-        public int ExperienceContribution { get; set; } = 0;
-        public int TownKills { get; set; } = 0;
+        public int HighestKillStreak
+        {
+            get { return _highestKillStreak; }
+            set { _highestKillStreak = value; }
+        }
 
-        public TimeSpan TimeSpentDead { get; set; } = TimeSpan.Zero;
+        public int HeroDamage
+        {
+            get { return _heroDamage; }
+            set { _heroDamage = value; }
+        }
 
-        public int MercCampCaptures { get; set; } = 0;
-        public int WatchTowerCaptures { get; set; } = 0;
+        public int SiegeDamage
+        {
+            get { return _siegeDamage; }
+            set { _siegeDamage = value; }
+        }
 
-        public int MetaExperience { get; set; } = 0; // Exp added to the player's Account and Hero level after the match
+        public int StructureDamage
+        {
+            get { return _structureDamage; }
+            set { _structureDamage = value; }
+        }
 
-        public List<MatchAwardType> MatchAwards { get; set; } = new List<MatchAwardType>();
+        public int MinionDamage
+        {
+            get { return _minionDamage; }
+            set { _minionDamage = value; }
+        }
+
+        public int CreepDamage
+        {
+            get { return _creepDamage; }
+            set { _creepDamage = value; }
+        }
+
+        public int SummonDamage
+        {
+            get { return _summonDamage; }
+            set { _summonDamage = value; }
+        }
+
+        public TimeSpan? TimeCCdEnemyHeroes
+        {
+            get { return _timeCCdEnemyHeroes; }
+            set { _timeCCdEnemyHeroes = value; }
+        }
+
+        public int? Healing
+        {
+            get { return _healing; }
+            set { _healing = value; }
+        }
+
+        public int SelfHealing
+        {
+            get { return _selfHealing; }
+            set { _selfHealing = value; }
+        }
+
+        public int? DamageTaken
+        {
+            get { return _damageTaken; }
+            set { _damageTaken = value; }
+        }
+
+        public int ExperienceContribution
+        {
+            get { return _experienceContribution; }
+            set { _experienceContribution = value; }
+        }
+
+        public int TownKills
+        {
+            get { return _townKills; }
+            set { _townKills = value; }
+        }
+
+        public TimeSpan TimeSpentDead
+        {
+            get { return _timeSpentDead; }
+            set { _timeSpentDead = value; }
+        }
+
+        public int MercCampCaptures
+        {
+            get { return _mercCampCaptures; }
+            set { _mercCampCaptures = value; }
+        }
+
+        public int WatchTowerCaptures
+        {
+            get { return _watchTowerCaptures; }
+            set { _watchTowerCaptures = value; }
+        }
+
+        public int MetaExperience
+        {
+            get { return _metaExperience; }
+            set { _metaExperience = value; }
+        } // Exp added to the player's Account and Hero level after the match
+
+        public List<MatchAwardType> MatchAwards
+        {
+            get { return _matchAwards; }
+            set { _matchAwards = value; }
+        }
     }
 
     public class Talent
     {
+        private string _talentName = null;
         public int TalentID { get; set; }
-        public string TalentName { get; set; } = null;
+
+        public string TalentName
+        {
+            get { return _talentName; }
+            set { _talentName = value; }
+        }
+
         public TimeSpan TimeSpanSelected { get; set; }
     }
 

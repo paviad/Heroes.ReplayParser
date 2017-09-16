@@ -18,8 +18,18 @@ namespace Heroes.ReplayParser
         public Unit UnitKilledBy { get; set; }
         public Point PointBorn { get; set; }
         public Point PointDied { get; set; }
-        public List<Position> Positions { get; set; } = new List<Position>();
-        public List<OwnerChangeEvent> OwnerChangeEvents { get; set; } = new List<OwnerChangeEvent>();
+
+        public List<Position> Positions
+        {
+            get { return _positions; }
+            set { _positions = value; }
+        }
+
+        public List<OwnerChangeEvent> OwnerChangeEvents
+        {
+            get { return _ownerChangeEvents; }
+            set { _ownerChangeEvents = value; }
+        }
 
         public override string ToString()
         {
@@ -444,6 +454,9 @@ namespace Heroes.ReplayParser
             { "ZagaraRapidIncubationItem", UnitGroup.HeroTalentSelection },
             { "ZeratulVorpalBladeItem", UnitGroup.HeroTalentSelection }
         };
+
+        private List<Position> _positions = new List<Position>();
+        private List<OwnerChangeEvent> _ownerChangeEvents = new List<OwnerChangeEvent>();
 
         public static void ParseUnitData(Replay replay)
         {

@@ -5,8 +5,25 @@
 
     public class Replay
     {
+        private Player[] _playersWithOpenSlots = new Player[10];
+        private Player[] _clientListByWorkingSetSlotId = new Player[16];
+        private Player[] _clientListByUserId = new Player[16];
+        private Dictionary<int, TimeSpan>[] _teamLevels = new Dictionary<int, TimeSpan>[2];
+        private List<PeriodicXPBreakdown>[] _teamPeriodicXpBreakdown = new List<PeriodicXPBreakdown>[2];
+        private List<TeamObjective>[] _teamObjectives = new List<TeamObjective>[2] { new List<TeamObjective>(), new List<TeamObjective>() };
+        private string[][] _teamHeroBans = new string[2][] { new string[2] { null, null }, new string[2] { null, null } };
+        private bool _isGameEventsParsedSuccessfully = false;
+        private bool? _isStatisticsParsedSuccessfully = null;
+        private List<Message> _messages = new List<Message>();
+        private List<GameEvent> _gameEvents = new List<GameEvent>();
+        private List<Unit> _units = new List<Unit>();
+
         /// <summary> Gets a list of all messages which took place during the game. </summary>
-        public List<Message> Messages { get; set; } = new List<Message>();
+        public List<Message> Messages
+        {
+            get { return _messages; }
+            set { _messages = value; }
+        }
 
         /// <summary> Gets the speed the game was played at. </summary>
         public GameSpeed GameSpeed { get; set; }
@@ -24,7 +41,11 @@
         public Player[] Players { get; set; }
 
         /// <summary> In some places, this is used instead of the 'Player' array, in games with less than 10 players </summary>
-        public Player[] PlayersWithOpenSlots { get; set; } = new Player[10];
+        public Player[] PlayersWithOpenSlots
+        {
+            get { return _playersWithOpenSlots; }
+            set { _playersWithOpenSlots = value; }
+        }
 
         /// <summary> Gets the build number of the Heroes version used in creating the replay. </summary>
         public int ReplayBuild { get; set; }
@@ -42,19 +63,35 @@
         public DateTime Timestamp { get; set; }
 
         /// <summary> Gets the list of all clients connected to the game, using 'm_userId' as index </summary>
-        public Player[] ClientListByUserID { get; set; } = new Player[16];
+        public Player[] ClientListByUserID
+        {
+            get { return _clientListByUserId; }
+            set { _clientListByUserId = value; }
+        }
 
         /// <summary> Gets the list of all clients connected to the game, using 'm_workingSetSlotId' as index </summary>
-        public Player[] ClientListByWorkingSetSlotID { get; set; } = new Player[16];
+        public Player[] ClientListByWorkingSetSlotID
+        {
+            get { return _clientListByWorkingSetSlotId; }
+            set { _clientListByWorkingSetSlotId = value; }
+        }
 
         /// <summary> Gets the game events. </summary>
-        public List<GameEvent> GameEvents { get; set; } = new List<GameEvent>();
+        public List<GameEvent> GameEvents
+        {
+            get { return _gameEvents; }
+            set { _gameEvents = value; }
+        }
 
         /// <summary> Gets the tracker events. </summary>
         public List<TrackerEvent> TrackerEvents { get; set; }
 
         /// <summary> Gets a list of units. </summary>
-        public List<Unit> Units { get; set; } = new List<Unit>();
+        public List<Unit> Units
+        {
+            get { return _units; }
+            set { _units = value; }
+        }
 
         /// <summary> Gets the number of frames in this replay. </summary>
         public int Frames { get; set; }
@@ -66,19 +103,44 @@
         public uint RandomValue { get; set; }
 
         /// <summary> Team Levels ([Team][Level] = TimeSpan) </summary>
-        public Dictionary<int, TimeSpan>[] TeamLevels { get; set; } = new Dictionary<int, TimeSpan>[2];
+        public Dictionary<int, TimeSpan>[] TeamLevels
+        {
+            get { return _teamLevels; }
+            set { _teamLevels = value; }
+        }
 
         /// <summary> Periodic XP Breakdown ([Team][PeriodicXPBreakdown]) </summary>
-        public List<PeriodicXPBreakdown>[] TeamPeriodicXPBreakdown { get; set; } = new List<PeriodicXPBreakdown>[2];
+        public List<PeriodicXPBreakdown>[] TeamPeriodicXPBreakdown
+        {
+            get { return _teamPeriodicXpBreakdown; }
+            set { _teamPeriodicXpBreakdown = value; }
+        }
 
         /// <summary> Team Objectives ([Team][TeamObjective]) </summary>
-        public List<TeamObjective>[] TeamObjectives { get; set; } = new List<TeamObjective>[2] { new List<TeamObjective>(), new List<TeamObjective>() };
+        public List<TeamObjective>[] TeamObjectives
+        {
+            get { return _teamObjectives; }
+            set { _teamObjectives = value; }
+        }
 
         /// <summary> Team Hero Bans ([Team][HeroBanned]) </summary>
-        public string[][] TeamHeroBans { get; set; } = new string[2][] { new string[2] { null, null }, new string[2] { null, null } };
+        public string[][] TeamHeroBans
+        {
+            get { return _teamHeroBans; }
+            set { _teamHeroBans = value; }
+        }
 
-        public bool IsGameEventsParsedSuccessfully { get; set; } = false;
-        public bool? IsStatisticsParsedSuccessfully { get; set; } = null;
+        public bool IsGameEventsParsedSuccessfully
+        {
+            get { return _isGameEventsParsedSuccessfully; }
+            set { _isGameEventsParsedSuccessfully = value; }
+        }
+
+        public bool? IsStatisticsParsedSuccessfully
+        {
+            get { return _isStatisticsParsedSuccessfully; }
+            set { _isStatisticsParsedSuccessfully = value; }
+        }
     }
 
     public class PeriodicXPBreakdown
@@ -95,8 +157,15 @@
 
     public class TeamObjective
     {
+        private Player _player = null;
         public TimeSpan TimeSpan { get; set; }
-        public Player Player { get; set; } = null;
+
+        public Player Player
+        {
+            get { return _player; }
+            set { _player = value; }
+        }
+
         public TeamObjectiveType TeamObjectiveType { get; set; }
         public int Value { get; set; }
     }

@@ -137,14 +137,18 @@ namespace Heroes.ReplayParser
 
             // Replay Init Data
             ReplayInitData.Parse(replay, GetMpqFile(archive, ReplayInitData.FileName));
-            
+
             ReplayAttributeEvents.Parse(replay, GetMpqFile(archive, ReplayAttributeEvents.FileName));
 
             replay.TrackerEvents = ReplayTrackerEvents.Parse(GetMpqFile(archive, ReplayTrackerEvents.FileName));
 
             try
             {
-                replay.GameEvents = ReplayGameEvents.Parse(GetMpqFile(archive, ReplayGameEvents.FileName), replay.ClientListByUserID, replay.ReplayBuild, replay.ReplayVersionMajor);
+                replay.GameEvents = ReplayGameEvents.Parse(
+                    GetMpqFile(archive, ReplayGameEvents.FileName),
+                    replay.ClientListByUserID,
+                    replay.ReplayBuild,
+                    replay.ReplayVersionMajor);
                 replay.IsGameEventsParsedSuccessfully = true;
             }
             catch
@@ -165,10 +169,10 @@ namespace Heroes.ReplayParser
                     player.Talents = talentGameEventsDictionary[player];
             }
 
-			// Replay Server Battlelobby
-			if(!ignoreErrors && archive.Any(i => i.Filename == ReplayServerBattlelobby.FileName))
-				ReplayServerBattlelobby.GetBattleTags(replay, GetMpqFile(archive, ReplayServerBattlelobby.FileName));
-				// ReplayServerBattlelobby.Parse(replay, GetMpqFile(archive, ReplayServerBattlelobby.FileName));
+            // Replay Server Battlelobby
+            if (!ignoreErrors && archive.Any(i => i.Filename == ReplayServerBattlelobby.FileName))
+                ReplayServerBattlelobby.GetBattleTags(replay, GetMpqFile(archive, ReplayServerBattlelobby.FileName));
+            // ReplayServerBattlelobby.Parse(replay, GetMpqFile(archive, ReplayServerBattlelobby.FileName));
 
             // Parse Unit Data using Tracker events
             Unit.ParseUnitData(replay);
