@@ -458,15 +458,25 @@ namespace Heroes.ReplayParser
                 var updateTargetUnitEventArray = replay.GameEvents.Where(i => i.eventType == GameEventType.CCmdUpdateTargetUnitEvent).OrderBy(i => i.TimeSpan).ToArray();
                 var updateTargetUnitEventArrayIndex = 0;
 
+                var gg = replay.TrackerEvents.Where(r =>
+                    r.TimeSpan > TimeSpan.FromSeconds(50) && r.TimeSpan < TimeSpan.FromSeconds(53)).ToList();
+
                 foreach (var unitTrackerEvent in replay.TrackerEvents.Where(i =>
                     i.TrackerEventType == ReplayTrackerEvents.TrackerEventType.UnitBornEvent ||
                     i.TrackerEventType == ReplayTrackerEvents.TrackerEventType.UnitRevivedEvent ||
                     i.TrackerEventType == ReplayTrackerEvents.TrackerEventType.UnitDiedEvent ||
                     i.TrackerEventType == ReplayTrackerEvents.TrackerEventType.UnitOwnerChangeEvent ||
+                    (i.TrackerEventType == ReplayTrackerEvents.TrackerEventType.StatGameEvent && i.Data.dictionary[0].blobText == "PlayerDeath") ||
                     i.TrackerEventType == ReplayTrackerEvents.TrackerEventType.UnitPositionsEvent))
                 {
                     switch (unitTrackerEvent.TrackerEventType)
                     {
+                        case ReplayTrackerEvents.TrackerEventType.StatGameEvent:
+                            var victimId = (int)unitTrackerEvent.Data.dictionary[2].optionalData.array[0].dictionary[1].vInt.Value;
+                            var killerId = (int)unitTrackerEvent.Data.dictionary[2].optionalData.array[1].dictionary[1].vInt.Value;
+                            //var victim = activeUnitsByIndex[victimId];
+                            //var killer = activeUnitsByIndex[killerId];
+                            break;
                         case ReplayTrackerEvents.TrackerEventType.UnitBornEvent:
                         case ReplayTrackerEvents.TrackerEventType.UnitRevivedEvent:
                             Unit newUnit;
