@@ -316,7 +316,13 @@ namespace Heroes.ReplayParser
                             case "JungleCampInit": break;           // {StatGameEvent: {"JungleCampInit", , [{{"CampID"}, 1}], [{{"PositionX"}, 101}, {{"PositionY"}, 74}]}}
                             case "PlayerSpawned": break;            // {StatGameEvent: {"PlayerSpawned", [{{"Hero"}, "HeroLeoric"}], [{{"PlayerID"}, 1}], }}
                             case "GatesOpen": break;                // {StatGameEvent: {"GatesOpen", , , }}
-                            case "PlayerDeath": break;              // {StatGameEvent: {"PlayerDeath", , [{{"PlayerID"}, 8}, {{"KillingPlayer"}, 1}, {{"KillingPlayer"}, 2}, {{"KillingPlayer"}, 3}, {{"KillingPlayer"}, 4}, {{"KillingPlayer"}, 5}], [{{"PositionX"}, 130}, {{"PositionY"}, 80}]}}
+                            case "PlayerDeath": // {StatGameEvent: {"PlayerDeath", , [{{"PlayerID"}, 8}, {{"KillingPlayer"}, 1}, {{"KillingPlayer"}, 2}, {{"KillingPlayer"}, 3}, {{"KillingPlayer"}, 4}, {{"KillingPlayer"}, 5}], [{{"PositionX"}, 130}, {{"PositionY"}, 80}]}}
+                                var victimId = (int)trackerEvent.Data.dictionary[2].optionalData.array[0].dictionary[1].vInt.Value;
+                                var killerId = (int)trackerEvent.Data.dictionary[2].optionalData.array[1].dictionary[1].vInt.Value;
+                                var victim = playerIDDictionary[victimId];
+                                var killer = playerIDDictionary[killerId];
+                                //replay.Takedowns.Add(killEvent);
+                                break;
                             case "RegenGlobePickedUp":              // {StatGameEvent: {"RegenGlobePickedUp", , [{{"PlayerID"}, 1}], }}
                                 playerIDDictionary[(int)trackerEvent.Data.dictionary[2].optionalData.array[0].dictionary[1].vInt.Value].ScoreResult.RegenGlobes++;
                                 break;
