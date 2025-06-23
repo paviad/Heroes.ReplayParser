@@ -320,7 +320,13 @@ namespace Heroes.ReplayParser
                                 var victimId = (int)trackerEvent.Data.dictionary[2].optionalData.array[0].dictionary[1].vInt.Value;
                                 var killerId = (int)trackerEvent.Data.dictionary[2].optionalData.array[1].dictionary[1].vInt.Value;
                                 var victim = playerIDDictionary[victimId];
-                                var killer = playerIDDictionary[killerId];
+                                if (killerId == 0) {
+                                    // killed by minions or structures
+                                }
+                                else {
+                                    var killer = playerIDDictionary[killerId];
+                                }
+
                                 //replay.Takedowns.Add(killEvent);
                                 break;
                             case "RegenGlobePickedUp":              // {StatGameEvent: {"RegenGlobePickedUp", , [{{"PlayerID"}, 1}], }}
