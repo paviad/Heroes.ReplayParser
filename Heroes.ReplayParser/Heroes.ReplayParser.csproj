@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <DefineConstants>WITH_SHARPCOMPRESS</DefineConstants>
     <PackageId>Heroes.ReplayParser</PackageId>
     <Authors>Ben Barrett</Authors>
