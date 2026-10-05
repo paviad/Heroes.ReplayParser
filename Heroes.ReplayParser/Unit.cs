@@ -458,6 +458,11 @@ namespace Heroes.ReplayParser
                 var updateTargetUnitEventArray = replay.GameEvents.Where(i => i.eventType == GameEventType.CCmdUpdateTargetUnitEvent).OrderBy(i => i.TimeSpan).ToArray();
                 var updateTargetUnitEventArrayIndex = 0;
 
+                // In recent builds (seen in 94470 through 98304) game event unit tags use the tracker unit index * 16
+                // Detect this per replay, so older replays whose tags match the tracker index directly keep working
+                var isGameEventUnitIndexScaled = updateTargetUnitEventArray.Length > 0 && updateTargetUnitEventArray.All(i => (i.data.array[2].unsignedInt.Value >> 18) % 16 == 0);
+                int GetUnitIDFromGameEventTag(ulong tag) => isGameEventUnitIndexScaled ? GetUnitID((int)(tag >> 18) / 16, (int)(tag & 0x3ffff)) : (int)tag;
+
                 var gg = replay.TrackerEvents.Where(r =>
                     r.TimeSpan > TimeSpan.FromSeconds(50) && r.TimeSpan < TimeSpan.FromSeconds(53)).ToList();
 
@@ -593,8 +598,8 @@ namespace Heroes.ReplayParser
                     // Use 'CCmdUpdateTargetUnitEvent' to find an accurate location of units targeted
                     // Excellent for finding frequent, accurate locations of heroes during team fights
                     while (updateTargetUnitEventArrayIndex < updateTargetUnitEventArray.Length && unitTrackerEvent.TimeSpan > updateTargetUnitEventArray[updateTargetUnitEventArrayIndex].TimeSpan)
-                        if (activeUnitsByUnitID.ContainsKey((int)updateTargetUnitEventArray[updateTargetUnitEventArrayIndex++].data.array[2].unsignedInt.Value))
-                            activeUnitsByUnitID[(int)updateTargetUnitEventArray[updateTargetUnitEventArrayIndex - 1].data.array[2].unsignedInt.Value].Positions.Add(new Position {
+                        if (activeUnitsByUnitID.ContainsKey(GetUnitIDFromGameEventTag(updateTargetUnitEventArray[updateTargetUnitEventArrayIndex++].data.array[2].unsignedInt.Value)))
+                            activeUnitsByUnitID[GetUnitIDFromGameEventTag(updateTargetUnitEventArray[updateTargetUnitEventArrayIndex - 1].data.array[2].unsignedInt.Value)].Positions.Add(new Position {
                                 TimeSpan = updateTargetUnitEventArray[updateTargetUnitEventArrayIndex - 1].TimeSpan,
                                 Point = Point.FromEventFormat(
                                     updateTargetUnitEventArray[updateTargetUnitEventArrayIndex - 1].data.array[6].array[0].unsignedInt.Value,
