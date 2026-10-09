@@ -219,7 +219,7 @@ namespace Heroes.ReplayParser
             using (var mpqStream = archive.OpenFile(archive.Single(i => i.Filename == fileName)))
             {
                 var buffer = new byte[mpqStream.Length];
-                mpqStream.Read(buffer, 0, buffer.Length);
+                mpqStream.ReadExactly(buffer);
                 return buffer;
             }
         }
