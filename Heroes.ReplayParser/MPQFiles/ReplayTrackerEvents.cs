@@ -28,7 +28,7 @@ namespace Heroes.ReplayParser.MPQFiles
 
                     currentFrameCount += (int)TrackerEventStructure.read_vint(reader);
 
-                    var trackerEvent = new TrackerEvent { TimeSpan = TimeSpan.FromSeconds((int)(currentFrameCount / 16.0)) };
+                    var trackerEvent = new TrackerEvent { TimeSpan = TimeSpan.FromSeconds((int)(currentFrameCount / 16.0)), GameLoop = currentFrameCount };
 
                     reader.ReadBytes(1); // Always 09
 
@@ -105,6 +105,9 @@ namespace Heroes.ReplayParser.MPQFiles
 
         /// <summary> Gets or sets the timespan of when the event occurred. </summary>
         public TimeSpan TimeSpan { get; set; }
+
+        /// <summary> Gets or sets the game loop (1/16 s) of when the event occurred; TimeSpan is truncated to whole seconds. </summary>
+        public int GameLoop { get; set; }
 
         /// <summary> Gets or sets the data of the event. </summary>
         public TrackerEventStructure Data { get; set; }
